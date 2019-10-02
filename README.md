@@ -22,12 +22,29 @@
 ```http
 POST /post
 ```
-#### Body(JSON)
+#### Request Body(JSON)
 
 | Parameter | Type | Required | Validation | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | `handle`  | `String` | &#9745; | min 1; max 20  | Username |
 | `message` | `String` | &#9745; | min 1; max 140 | Message body|
+
+#### Response
+
+| Type | Code | Description |
+| :--- | :--- | :--- |
+| Ok | 200 | See payload below |
+| Not Found | 404 | The user was not found |
+| ISE | 500 | Everything else |
+
+#### Payload
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `id`  | `UUID` | Id |
+| `author` | `UserEntity` | Post's author |
+| `message` | `String` | Post body |
+| `timestamp` | `LocalDateTime` | Post created at |
 
 ----
 
@@ -45,6 +62,23 @@ GET /wall/{handle}
 | :--- | :--- | :--- | :--- | :--- |
 | `handle`  | `String` | &#9745; | min 1; max 20  | Username |
 
+#### Response
+
+| Type | Code | Description |
+| :--- | :--- | :--- |
+| Ok | 200 | See payload below |
+| Not Found | 404 | The user was not found |
+| ISE | 500 | Everything else |
+
+#### Payload (Array)
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `id`  | `UUID` | Id |
+| `author` | `UserEntity` | Post's author |
+| `message` | `String` | Post body |
+| `timestamp` | `LocalDateTime` | Post created at |
+
 ----
 
 ### Timeline
@@ -59,6 +93,23 @@ GET /timeline/{handle}
 | Parameter | Type | Required | Validation | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | `handle`  | `String` | &#9745; | min 1; max 20  | Username |
+
+#### Response
+
+| Type | Code | Description |
+| :--- | :--- | :--- |
+| Ok | 200 | See payload below |
+| Not Found | 404 | The user was not found |
+| ISE | 500 | Everything else |
+
+#### Payload (Array)
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `id`  | `UUID` | Id |
+| `author` | `UserEntity` | Post's author |
+| `message` | `String` | Post body |
+| `timestamp` | `LocalDateTime` | Post created at |
 
 ----
 
@@ -76,6 +127,14 @@ POST /follow
 | `followerHandle`  | `String` | &#9745; | min 1; max 20  | Username |
 | `followedHandle`  | `String` | &#9745; | min 1; max 20  | Username |
 
+#### Response
+
+| Type | Code | Description |
+| :--- | :--- | :--- |
+| Ok | 200 | No payload |
+| Not Found | 404 | The user was not found |
+| Conflict | 409 | The user is already being followed |
+| ISE | 500 | Everything else |
 ----
 
 ### Unfollow
@@ -91,5 +150,14 @@ POST /unfollow
 | :--- | :--- | :--- | :--- | :--- |
 | `followerHandle`  | `String` | &#9745; | min 1; max 20  | Username |
 | `followedHandle`  | `String` | &#9745; | min 1; max 20  | Username |
+
+#### Response
+
+| Type | Code | Description |
+| :--- | :--- | :--- |
+| Ok | 200 | No payload |
+| Not Found | 404 | The user was not found |
+| Conflict | 409 | The user is not being followed |
+| ISE | 500 | Everything else |
 
 ----
