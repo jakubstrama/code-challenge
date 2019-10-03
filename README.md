@@ -15,7 +15,15 @@
     docker run -it --rm -d -p8080:8080 challenge
  
 
+## Future improvements
+
+- Add integration tests
+- Add End 2 End tests (eg Cucumber)
+- Replace in-memory storage with a DBMS
+
 ## Api:
+
+For Api testing purposes a Postman collection file can be found in the Docs folder. 
 
 ### Post
 
