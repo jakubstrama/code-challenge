@@ -13,6 +13,8 @@ import com.hsbc.codechallenge.exceptions.runtime.UserNotFoundException;
 import com.hsbc.codechallenge.persistence.entity.PostEntity;
 import com.hsbc.codechallenge.service.PostService;
 import com.hsbc.codechallenge.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +32,17 @@ public class ApiController {
     @Autowired
     private UserService userService;
 
+    Logger logger = LoggerFactory.getLogger(ApiController.class);
+
     @GetMapping("/wall/{handle}")
     public List<PostEntity> getWall(@PathVariable String handle) {
         try {
             return postService.getWall(handle);
         } catch (UserNotFoundException e) {
+            logger.info("User not found for handle: " + e.getMessage());
             throw new UserNotFoundApiException();
         } catch (Exception e) {
+            logger.warn("Unknown exception while calling method wall", e);
             throw new GeneralApiException();
         }
     }
@@ -46,8 +52,10 @@ public class ApiController {
         try {
             return postService.getTimeline(handle);
         } catch (UserNotFoundException e) {
+            logger.info("User not found for handle: " + e.getMessage());
             throw new UserNotFoundApiException();
         } catch (Exception e) {
+            logger.warn("Unknown exception while calling method timeline", e);
             throw new GeneralApiException();
         }
     }
@@ -58,10 +66,12 @@ public class ApiController {
             userService.followUser(followDto.getFollowedHandle(), followDto.getFollowerHandle());
             return new ResponseEntity(HttpStatus.OK);
         } catch (UserNotFoundException e) {
+            logger.info("User not found for handle:" + e.getMessage());
             throw new UserNotFoundApiException();
         } catch (UserAlreadyFollowedException e) {
             throw new UserAlreadyFollowedApiException();
         } catch (Exception e) {
+            logger.warn("Unknown exception while calling method follow", e);
             throw new GeneralApiException();
         }
     }
@@ -72,10 +82,12 @@ public class ApiController {
             userService.unFollowUser(followDto.getFollowedHandle(), followDto.getFollowerHandle());
             return new ResponseEntity(HttpStatus.OK);
         } catch (UserNotFoundException e) {
+            logger.info("User not found for handle:" + e.getMessage());
             throw new UserNotFoundApiException();
         } catch (UserNotFollowedException e) {
             throw new UserNotFollowedApiException();
         } catch (Exception e) {
+            logger.warn("Unknown exception while calling method unfollow", e);
             throw new GeneralApiException();
         }
     }
@@ -84,9 +96,8 @@ public class ApiController {
     public PostEntity newPost(@RequestBody @Valid PostDto postDto) {
         try {
             return postService.newPost(postDto.getMessage(), postDto.getHandle());
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundApiException();
         } catch (Exception e) {
+            logger.warn("Unknown exception while calling method post", e);
             throw new GeneralApiException();
         }
     }

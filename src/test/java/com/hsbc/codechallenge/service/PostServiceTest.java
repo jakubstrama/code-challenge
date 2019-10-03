@@ -114,7 +114,7 @@ public class PostServiceTest {
         UserEntity user1 = createUser(handle1);
 
         // When
-        when(userService.findUser(handle1)).thenThrow(new UserNotFoundException());
+        when(userService.findUser(handle1)).thenThrow(new UserNotFoundException(handle1));
         when(userService.createUser(handle1)).thenReturn(user1);
         doAnswer(returnsFirstArg()).when(postRepository).addPost(any(PostEntity.class));
         PostEntity given = postService.newPost(message, handle1);

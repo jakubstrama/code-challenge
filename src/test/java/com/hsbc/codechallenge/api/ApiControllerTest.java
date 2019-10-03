@@ -147,22 +147,6 @@ public class ApiControllerTest {
     }
 
     @Test
-    public void testNewPost_UserNotFoundException() throws Exception {
-        // Given
-        String handle = "user1";
-        String message = "Sample text1";
-
-        // When
-        when(postService.newPost(message, handle)).thenThrow(UserNotFoundException.class);
-
-        // Then
-        mockMvc.perform(
-                post("/post").contentType(MediaType.APPLICATION_JSON)
-                        .content(createPostBody(handle, message)))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     public void  testFollow() throws Exception {
         // Given
         String followed = "user1";
@@ -182,7 +166,7 @@ public class ApiControllerTest {
         String follower = "user2";
 
         // When
-        doThrow(new UserNotFoundException()).when(userService).followUser(followed, follower);
+        doThrow(new UserNotFoundException(followed)).when(userService).followUser(followed, follower);
 
         // Then
         mockMvc.perform(
@@ -228,7 +212,7 @@ public class ApiControllerTest {
         String follower = "user2";
 
         // When
-        doThrow(new UserNotFoundException()).when(userService).unFollowUser(followed, follower);
+        doThrow(new UserNotFoundException(followed)).when(userService).unFollowUser(followed, follower);
 
         // Then
         mockMvc.perform(

@@ -21,7 +21,7 @@ public class UserService {
                 .stream()
                 .filter(user -> user.getHandle().equals(handle))
                 .findFirst()
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException(handle));
     }
 
     public void followUser(String followedHandle, String followerHandle) {
